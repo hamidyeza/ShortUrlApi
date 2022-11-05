@@ -13,8 +13,6 @@ namespace ShortUrlApi.DataModel.Services
 
         Task<ShortUrlDto> GetShortUrlAsync(string shortUrl);
 
-        Task<bool> CheckIsExistUrlAsync(string orginalUrl);
-
         Task IncrementUsedUrlAsync(string shortUrl);
 
         Task<int> GetUrlUsedCount(string shortUrl);

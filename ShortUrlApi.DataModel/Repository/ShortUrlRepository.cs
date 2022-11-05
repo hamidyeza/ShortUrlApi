@@ -21,14 +21,23 @@ namespace ShortUrlApi.DataModel.Repository
             _context = context;
         }
 
-        public Task<bool> CheckIsExistUrlAsync(string orginalUrl)
+        public async Task<ShortUrlDto> CreateShortUrlAsync(string originalUrl)
         {
-            throw new NotImplementedException();
-        }
+            var uriLeftPart = UrlHelper.GetUriLeftPart(originalUrl);
+            var shortUri = UrlHelper.GetShortUri(uriLeftPart);
 
-        public Task<ShortUrlDto> CreateShortUrlAsync(string originalUrl)
-        {
-            throw new NotImplementedException();
+            ShortUrl url = new()
+            {
+                OrginalUrl = originalUrl,
+                ShortenerUrl = shortUri,
+                UsedUrlCount = 0,
+                ShortUrlId=Guid.NewGuid()
+            };
+
+            await _context.ShortUrls.AddAsync(url);
+            await _context.SaveChangesAsync();
+
+            return new ShortUrlDto { ShortenerUrl= url.ShortenerUrl,OrginalUrl=url.OrginalUrl};
         }
 
         public async Task<ShortUrlDto> GetShortUrlAsync(string shortUrl)
