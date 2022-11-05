@@ -56,5 +56,22 @@ namespace ShortUrlApi.Controllers
             }
         }
 
+
+        [Route("getcount")]
+        [HttpGet]
+        public async Task<IActionResult> GetCount(string url)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(url))
+                    return BadRequest();
+                var count = await _shortUrlRepository.GetUrlUsedCount(url);
+                return Ok(count);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
