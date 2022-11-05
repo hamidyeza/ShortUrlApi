@@ -31,9 +31,18 @@ namespace ShortUrlApi.DataModel.Repository
             throw new NotImplementedException();
         }
 
-        public Task<ShortUrlDto> GetShortUrlAsync(string shortUrl)
+        public async Task<ShortUrlDto> GetShortUrlAsync(string shortUrl)
         {
-            throw new NotImplementedException();
+            ShortUrl? url = await _context.ShortUrls.Where(s => s.ShortenerUrl == shortUrl).FirstOrDefaultAsync();
+            if(url == null)
+                throw new Exception(ExceptionMessageConstants.UrlNotFound);
+            await IncrementUsedUrlAsync(shortUrl);
+            ShortUrlDto urlDto = new()
+            {
+                ShortenerUrl = url.ShortenerUrl,
+                OrginalUrl = url.OrginalUrl
+            };
+            return urlDto;
         }
 
         public async Task<int> GetUrlUsedCount(string shortUrl)
