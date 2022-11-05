@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShortUrlApi.DataModel.DTOs;
 using ShortUrlApi.DataModel.Services;
+using System;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -36,12 +37,23 @@ namespace ShortUrlApi.Controllers
             }
         }
 
-        
 
-        // POST api/<ShortUrlController>
+
+        [Route("create")]
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> CreateShortUrl([FromBody] string orginalUrl)
         {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(orginalUrl))
+                    return BadRequest();
+                var shortUrl = await _shortUrlRepository.CreateShortUrlAsync(orginalUrl);
+                return Ok(shortUrl);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }
