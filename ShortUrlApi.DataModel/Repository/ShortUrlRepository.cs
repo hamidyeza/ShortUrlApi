@@ -31,19 +31,19 @@ namespace ShortUrlApi.DataModel.Repository
                 OrginalUrl = originalUrl,
                 ShortenerUrl = shortUri,
                 UsedUrlCount = 0,
-                ShortUrlId=Guid.NewGuid()
+                ShortUrlId = Guid.NewGuid()
             };
 
             await _context.ShortUrls.AddAsync(url);
             await _context.SaveChangesAsync();
 
-            return new ShortUrlDto { ShortenerUrl= url.ShortenerUrl,OrginalUrl=url.OrginalUrl};
+            return new ShortUrlDto { ShortenerUrl = url.ShortenerUrl, OrginalUrl = url.OrginalUrl };
         }
 
         public async Task<ShortUrlDto> GetShortUrlAsync(string shortUrl)
         {
             ShortUrl? url = await _context.ShortUrls.Where(s => s.ShortenerUrl == shortUrl).FirstOrDefaultAsync();
-            if(url == null)
+            if (url == null)
                 throw new Exception(ExceptionMessageConstants.UrlNotFound);
             await IncrementUsedUrlAsync(shortUrl);
             ShortUrlDto urlDto = new()
@@ -57,7 +57,7 @@ namespace ShortUrlApi.DataModel.Repository
         public async Task<int> GetUrlUsedCount(string shortUrl)
         {
             ShortUrl? url = await _context.ShortUrls.Where(s => s.ShortenerUrl == shortUrl).FirstOrDefaultAsync();
-            if(url != null)
+            if (url != null)
                 return url.UsedUrlCount;
             return 0;
         }
