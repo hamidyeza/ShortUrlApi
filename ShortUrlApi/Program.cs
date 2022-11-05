@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ShortUrlApi.DataModel;
+using ShortUrlApi.DataModel.Repository;
+using ShortUrlApi.DataModel.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 
 // Add services to the container.
+builder.Services.AddScoped<IShortUrlRepository, ShortUrlRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

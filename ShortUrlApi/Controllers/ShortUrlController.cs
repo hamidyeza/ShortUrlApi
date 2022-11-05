@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ShortUrlApi.DataModel.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,6 +9,15 @@ namespace ShortUrlApi.Controllers
     [ApiController]
     public class ShortUrlController : ControllerBase
     {
+       private readonly IShortUrlRepository _shortUrlRepository;
+
+        public ShortUrlController(IShortUrlRepository shortUrlRepository)
+        {
+            _shortUrlRepository = shortUrlRepository;
+        }
+
+
+
         // GET: api/<ShortUrlController>
         [HttpGet]
         public IEnumerable<string> Get()
