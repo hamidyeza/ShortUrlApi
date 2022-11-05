@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ShortUrlApi.CommonLayer.Helper;
 using ShortUrlApi.DataModel.DTOs;
+using ShortUrlApi.DataModel.Entities;
 using ShortUrlApi.DataModel.Services;
 using System;
 using System.Collections.Generic;
@@ -40,9 +41,16 @@ namespace ShortUrlApi.DataModel.Repository
             throw new NotImplementedException();
         }
 
-        public Task IncrementUsedUrlAsync(string shortUrl)
+        public async Task IncrementUsedUrlAsync(string shortUrl)
         {
-            throw new NotImplementedException();
+            ShortUrl? url = await _context.ShortUrls.Where(s => s.ShortenerUrl == shortUrl).FirstOrDefaultAsync();
+            if (url != null)
+            {
+                url.UsedUrlCount++;
+                _context.ShortUrls.Attach(url);
+                _context.Entry(url).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
