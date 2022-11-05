@@ -15,4 +15,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ShortUrlApi.CommonLayer\ShortUrlApi.CommonLayer.csproj" />
+  </ItemGroup>
+
 </Project>
